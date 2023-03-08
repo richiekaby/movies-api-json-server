@@ -1,32 +1,32 @@
-package net.larntech.movies.ui.details
+package net.larntech.movies.ui.new_movie_details
 
-import android.content.Context
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import net.larntech.movies.R
-import net.larntech.movies.databinding.ActivityMovieDetailsBinding
+import net.larntech.movies.databinding.ActivityNewMovieDetailsBinding
 import net.larntech.movies.model.movies.favourites.MoviesItem
-import net.larntech.movies.ui.main.MainActivityViewModel
+import net.larntech.movies.ui.main.MainActivity
 import net.larntech.movies.ui.rating.RateUsBottomDialog
 import net.larntech.movies.util.Status
 
-class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInterface {
-    private lateinit var binding: ActivityMovieDetailsBinding
+class NewMovieDetailsActivity : AppCompatActivity(),RateUsBottomDialog.RatingInterface {
+
+    private lateinit var binding: ActivityNewMovieDetailsBinding
     private lateinit var moviesItem: MoviesItem
-    private val viewModel: MovieDetailsViewModel by viewModels()
+    private val viewModel: NewMovieDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
+        binding = ActivityNewMovieDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initData()
     }
@@ -49,14 +49,15 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
     }
 
     private fun handleViewModel(){
-        viewModel.updateFavourite.observe(this){
+        viewModel.addFavourite.observe(this){
             when (it.status) {
                 Status.SUCCESS -> {
                     handleProgressBar(false)
 
                     if(it.data != null) {
                         moviesItem = it.data
-                        showData()
+                        showMessage("Added successfully ...")
+                        gobackToMain()
                     }else{
                         showMessage("Unable to update")
                     }
@@ -76,6 +77,13 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
             }
         }
     }
+    private fun gobackToMain(){
+        Handler().postDelayed(Runnable {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        },1500)
+
+    }
 
     private fun handleClickListener(){
         binding.llFirst.setOnClickListener {
@@ -84,17 +92,18 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
         }
 
         binding.llSecond.setOnClickListener {
-            if(moviesItem.favorite){
-                var newMovieItem = moviesItem
-                newMovieItem.favorite = false
-                viewModel.updateFavourite(newMovieItem)
-
-            }else{
-                var newMovieItem = moviesItem
-                newMovieItem.favorite = true
-                viewModel.updateFavourite(newMovieItem)
-            }
-
+//            if(moviesItem.favorite){
+//                var newMovieItem = moviesItem
+//                newMovieItem.favorite = false
+//                viewModel.addFavourite(newMovieItem)
+//
+//            }else{
+//                var newMovieItem = moviesItem
+//                newMovieItem.favorite = true
+//                viewModel.addFavourite(newMovieItem)
+//            }
+            var rateDialog = RateUsBottomDialog(this, moviesItem.myScore.toString())
+            rateDialog.show(supportFragmentManager, "")
         }
     }
 
@@ -103,7 +112,7 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
     }
 
     private fun showData(){
-        loadImages(moviesItem.posterPath)
+        loadImages("https://image.tmdb.org/t/p/original/${moviesItem.posterPath}")
         binding.tvTitle.text = moviesItem.title
         binding.tvOriginalLanguage.text = moviesItem.originalLanguage
         binding.tvOriginalTitle.text = moviesItem.originalTitle
@@ -130,6 +139,15 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
 
     }
 
+    private fun loadImagesA(file: String) {
+        //load image
+        Glide.with(this)
+            .load(file)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .placeholder(ContextCompat.getDrawable(this, R.drawable.baseline_image_24))
+            .into(binding.imageView)
+    }
+
     private fun loadImages(file: String) {
         //load image
         Glide.with(this)
@@ -142,7 +160,9 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
     override fun newRating(rateValue: Int) {
         var newMovieItem = moviesItem
         newMovieItem.myScore = rateValue
-        viewModel.updateFavourite(newMovieItem)
+        newMovieItem.favorite = true
+        newMovieItem.posterPath = "https://image.tmdb.org/t/p/original/${moviesItem.posterPath}"
+        viewModel.addFavourite(newMovieItem)
     }
 
     private fun handleProgressBar(show: Boolean){

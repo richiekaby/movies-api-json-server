@@ -29,7 +29,7 @@ class RateUsBottomDialog(var ratingInterface: RatingInterface, var originalRate:
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clickListener()
-        binding.edRating.setText(originalRate)
+//        binding.edRating.setText(originalRate)
     }
 
     private fun clickListener(){

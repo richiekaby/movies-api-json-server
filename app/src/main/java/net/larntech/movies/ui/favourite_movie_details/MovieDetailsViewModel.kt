@@ -1,4 +1,4 @@
-package net.larntech.movies.ui.details
+package net.larntech.movies.ui.favourite_movie_details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

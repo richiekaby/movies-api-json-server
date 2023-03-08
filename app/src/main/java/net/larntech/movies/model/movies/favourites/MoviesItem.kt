@@ -15,7 +15,7 @@ data class MoviesItem(@SerializedName("overview")
                       @SerializedName("genre_ids")
                       val genreIds: List<Integer>?,
                       @SerializedName("poster_path")
-                      val posterPath: String = "",
+                      var posterPath: String = "",
                       @SerializedName("my_score")
                       var myScore: Int = 0,
                       @SerializedName("backdrop_path")

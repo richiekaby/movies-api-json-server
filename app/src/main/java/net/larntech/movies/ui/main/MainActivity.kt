@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.telecom.Call.Details
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import net.larntech.movies.R
 import net.larntech.movies.databinding.ActivityMainBinding
 import net.larntech.movies.model.movies.favourites.MoviesItem
-import net.larntech.movies.ui.details.MovieDetailsActivity
+import net.larntech.movies.ui.favourite_movie_details.MovieDetailsActivity
+import net.larntech.movies.ui.new_movie.NewMovieActivity
 import net.larntech.movies.util.Status
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +40,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initData(){
         handleViewModel()
+        handleClicks()
+    }
+
+    private fun handleClicks(){
+        binding.newMovies.setOnClickListener {
+            startActivity(Intent(this,NewMovieActivity::class.java))
+        }
     }
 
     private fun getAllFavouriteMovies(){

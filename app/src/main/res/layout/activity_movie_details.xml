@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.details.MovieDetailsActivity">
+    tools:context=".ui.favourite_movie_details.MovieDetailsActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
-                android:text="@string/favourite_movies"
+                android:text="MOVIE DETAILS"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
