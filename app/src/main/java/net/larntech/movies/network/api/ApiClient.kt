@@ -1,6 +1,6 @@
 package net.larntech.movies.network.api
 
-import com.pesapal.paygateway.activities.payment.data.services.ApiServices
+import net.larntech.movies.network.services.ApiServices
 import net.larntech.movies.config.BaseUrl.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
