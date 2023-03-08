@@ -10,4 +10,8 @@ interface ApiServices {
     @GET("movies")
     suspend fun getFavouriteMovies() : List<MoviesItem>
 
+    @PUT("movies/{id}")
+    suspend fun updateFavourite(@Path("id") id: Int, @Body moviesItem: MoviesItem) : MoviesItem
+
+
 }

@@ -1,8 +1,10 @@
 package net.larntech.movies.ui.main
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.telecom.Call.Details
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,22 +18,30 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import net.larntech.movies.R
 import net.larntech.movies.databinding.ActivityMainBinding
 import net.larntech.movies.model.movies.favourites.MoviesItem
+import net.larntech.movies.ui.details.MovieDetailsActivity
 import net.larntech.movies.util.Status
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var customAdapter: CustomAdapter
     private lateinit var binding: ActivityMainBinding
+    private lateinit var movieList: MutableList<MoviesItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initData()
         handleViewModel()
         getAllFavouriteMovies()
+    }
+
+    private fun initData(){
+        movieList = ArrayList()
     }
 
     private fun getAllFavouriteMovies(){
@@ -42,7 +52,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.allFavouriteMovies.observe(this){
             when (it.status) {
                 Status.SUCCESS -> {
-                    handleView(it.data!!)
+                    if(it.data != null && it.data.isNotEmpty()) {
+                        for (movie in it.data){
+                            if(movie.favorite){
+                                movieList.add(movie)
+                            }
+                        }
+                        handleView(movieList)
+                    }else{
+                        showMessage("No favourite movie found ...")
+                    }
                 }
                 Status.ERROR -> {
                     showMessage(it.message!!)
@@ -64,9 +83,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.gridView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-//                clickedImage(position)
+                handleClickedMovie(movieList[position])
             }
 
+    }
+
+    private fun handleClickedMovie(movieItem: MoviesItem){
+        startActivity(Intent(this, MovieDetailsActivity::class.java).putExtra("data",movieItem))
     }
 
     private fun showMessage(message: String){

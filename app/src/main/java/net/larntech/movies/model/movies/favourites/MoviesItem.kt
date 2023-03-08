@@ -17,7 +17,7 @@ data class MoviesItem(@SerializedName("overview")
                       @SerializedName("poster_path")
                       val posterPath: String = "",
                       @SerializedName("my_score")
-                      val myScore: Int = 0,
+                      var myScore: Int = 0,
                       @SerializedName("backdrop_path")
                       val backdropPath: String = "",
                       @SerializedName("release_date")
@@ -31,6 +31,6 @@ data class MoviesItem(@SerializedName("overview")
                       @SerializedName("adult")
                       val adult: Boolean = false,
                       @SerializedName("favorite")
-                      val favorite: Boolean = false,
+                      var favorite: Boolean = false,
                       @SerializedName("vote_count")
-                      val voteCount: Int = 0)
+                      val voteCount: Int = 0): java.io.Serializable
