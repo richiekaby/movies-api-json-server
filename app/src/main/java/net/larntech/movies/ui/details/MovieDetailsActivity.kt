@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -51,6 +52,8 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
         viewModel.updateFavourite.observe(this){
             when (it.status) {
                 Status.SUCCESS -> {
+                    handleProgressBar(false)
+
                     if(it.data != null) {
                         moviesItem = it.data
                         showData()
@@ -59,12 +62,15 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
                     }
                 }
                 Status.ERROR -> {
+                    handleProgressBar(false)
                     showMessage(it.message!!)
                 }
                 Status.LOADING -> {
-
+                    handleProgressBar(true)
                 }
                 else -> {
+                    handleProgressBar(false)
+
                     Log.e(" else ", " ====> auth")
                 }
             }
@@ -137,5 +143,13 @@ class MovieDetailsActivity : AppCompatActivity(), RateUsBottomDialog.RatingInter
         var newMovieItem = moviesItem
         newMovieItem.myScore = rateValue
         viewModel.updateFavourite(newMovieItem)
+    }
+
+    private fun handleProgressBar(show: Boolean){
+        if(show) {
+            binding.progressBarInclude.progressBar.visibility = View.VISIBLE
+        }else{
+            binding.progressBarInclude.progressBar.visibility = View.GONE
+        }
     }
 }

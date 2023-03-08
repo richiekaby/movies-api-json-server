@@ -36,12 +36,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initData()
-        handleViewModel()
-        getAllFavouriteMovies()
     }
 
     private fun initData(){
-        movieList = ArrayList()
+        handleViewModel()
     }
 
     private fun getAllFavouriteMovies(){
@@ -52,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.allFavouriteMovies.observe(this){
             when (it.status) {
                 Status.SUCCESS -> {
+                    handleProgressBar(false)
+                    movieList = ArrayList()
+
                     if(it.data != null && it.data.isNotEmpty()) {
                         for (movie in it.data){
                             if(movie.favorite){
@@ -64,12 +65,16 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 Status.ERROR -> {
+                    handleProgressBar(false)
+
                     showMessage(it.message!!)
                 }
                 Status.LOADING -> {
-
+                    handleProgressBar(true)
                 }
                 else -> {
+                    handleProgressBar(false)
+
                     Log.e(" else ", " ====> auth")
                 }
             }
@@ -157,5 +162,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun handleProgressBar(show: Boolean){
+        if(show) {
+            binding.progressBarInclude.progressBar.visibility = View.VISIBLE
+        }else{
+            binding.progressBarInclude.progressBar.visibility = View.GONE
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getAllFavouriteMovies()
+    }
 }

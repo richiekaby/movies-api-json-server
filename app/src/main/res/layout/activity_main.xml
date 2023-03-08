@@ -49,5 +49,8 @@
         tools:listitem="@layout/row_movies"
         android:verticalSpacing="10dp"
         android:layout_height="0dp"/>
-
+    <include
+        android:id="@+id/progressBarInclude"
+        layout="@layout/progress_bar"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
