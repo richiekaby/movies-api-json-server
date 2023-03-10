@@ -133,7 +133,6 @@ class WeatherActivity : AppCompatActivity() {
 
         updateWeatherIcon(weatherDataResponse.current.condition.icon)
     }
-
     private fun updateWeatherIcon(url: String){
         var newUrl = url
         if(newUrl.contains("//")){
