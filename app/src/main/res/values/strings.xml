@@ -2,10 +2,10 @@
     <string name="app_name">movies</string>
     <string name="favourite_movies">Favourites</string>
 
-   <string-array name="sort_title">
-            <item>Ascending</item>
-            <item>Descending</item>
-   </string-array>
+    <string-array name="sort_title">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 
     <string-array name="sort_popular">
         <item>Ascending</item>

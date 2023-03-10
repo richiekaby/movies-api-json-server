@@ -19,6 +19,7 @@ import net.larntech.movies.databinding.ActivityMainBinding
 import net.larntech.movies.model.movies.favourites.MoviesItem
 import net.larntech.movies.ui.favourite_movie_details.MovieDetailsActivity
 import net.larntech.movies.ui.new_movie.NewMovieActivity
+import net.larntech.movies.ui.weather.WeatherActivity
 import net.larntech.movies.util.Status
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity() {
     private fun handleClicks(){
         binding.newMovies.setOnClickListener {
             startActivity(Intent(this,NewMovieActivity::class.java))
+        }
+        binding.tvWeather.setOnClickListener {
+            startActivity(Intent(this,WeatherActivity::class.java))
         }
     }
 
